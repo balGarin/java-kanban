@@ -28,5 +28,10 @@ public class Epic extends Task {
         subtasksOfEpic.remove(subtask);
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString() + "\b, " +
+                "subtasksOfEpic.size=" + subtasksOfEpic.size() +
+                '}';
+    }
 }
