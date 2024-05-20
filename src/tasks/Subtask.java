@@ -1,3 +1,5 @@
+package tasks;
+
 public class Subtask extends Task {
 
     private int idOfEpic;
@@ -5,7 +7,7 @@ public class Subtask extends Task {
     public Subtask(String name, String description, Status status, int idOfEpic) {
         super(name, description, status);
         this.idOfEpic = idOfEpic;
-        setType("Subtask");
+        setType("tasks.Subtask");
     }
 
     public int getIdOfEpic() {
