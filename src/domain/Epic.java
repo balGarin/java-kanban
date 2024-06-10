@@ -1,4 +1,4 @@
-package tasks;
+package domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ public class Epic extends Task {
     public Epic(String name, String description, Status status) {
         super(name, description, status);
         subtasksOfEpic = new ArrayList<>();
-        setType("tasks.Epic");
+        setType("Epic");
     }
 
 
@@ -23,7 +23,7 @@ public class Epic extends Task {
     }
 
     public List<Subtask> getSubtasksOfEpic() {
-        return subtasksOfEpic;
+        return new ArrayList<>(subtasksOfEpic);
     }
 
     public void removeSubtask(Subtask subtask) {

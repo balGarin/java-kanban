@@ -1,6 +1,6 @@
 package managers;
 
-import tasks.Task;
+import domain.Task;
 
 import java.util.List;
 
