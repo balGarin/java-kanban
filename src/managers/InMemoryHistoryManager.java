@@ -10,7 +10,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private final List<Task> history = new ArrayList<>();
 
     public InMemoryHistoryManager() {
-        System.out.println("Hello, i am the InMemoryHistoryManager");
+
 
     }
 

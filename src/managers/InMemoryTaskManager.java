@@ -14,7 +14,6 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     public InMemoryTaskManager() {
-        System.out.println("Hello! i am the InMemoryTaskManager");
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
