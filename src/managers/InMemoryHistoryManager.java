@@ -21,6 +21,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void addTask(Task task) {
+        if (task == null) {
+            return;
+        }
         if (historyCheck.containsKey(task.getId())) {
             removeNode(historyCheck.get(task.getId()));
             historyCheck.remove(task.getId());
