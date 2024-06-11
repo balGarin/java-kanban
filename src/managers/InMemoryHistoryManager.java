@@ -3,21 +3,13 @@ package managers;
 import domain.Node;
 import domain.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-
-    private final Map<Integer, Node<Task>> historyCheck = new HashMap<>();
     private final CustomLinkedList<Task> history = new CustomLinkedList<>();
+    private final Map<Integer, Node> historyCheck = new HashMap<>();
 
-    public InMemoryHistoryManager() {
-
-
-    }
 
     @Override
     public void addTask(Task task) {
@@ -26,11 +18,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         if (historyCheck.containsKey(task.getId())) {
             removeNode(historyCheck.get(task.getId()));
-            historyCheck.remove(task.getId());
         }
-        history.addLust(task);
-        historyCheck.put(task.getId(), history.tail);
-
+        historyCheck.put(task.getId(), history.addLust(task));
     }
 
     @Override
@@ -76,7 +65,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         private int size = 0;
 
 
-        public void addLust(T element) {
+        public Node addLust(T element) {
             Node<T> oldTail = tail;
             Node<T> newNode = new Node<>(tail, element, null);
             if (tail == null) {
@@ -87,7 +76,7 @@ public class InMemoryHistoryManager implements HistoryManager {
                 oldTail.next = tail;
             }
             size++;
-
+            return newNode;
         }
 
         public List<Task> getTasks() {
