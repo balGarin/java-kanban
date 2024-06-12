@@ -1,4 +1,4 @@
-package tasks;
+package domain;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
-        type = "tasks.Task";
+        type = "Task";
     }
 
     public String getName() {
