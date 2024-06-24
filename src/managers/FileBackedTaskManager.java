@@ -9,8 +9,8 @@ import java.util.*;
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private Path file;
 
-    private final String heading = String.format("%s,%s,%s,%s,%s,%s%n", "id", "type", "name", "status", "description"
-            , "epic");
+    private final String heading = String.format("%s,%s,%s,%s,%s,%s%n", "id", "type", "name", "status", "description",
+            "epic");
 
     public FileBackedTaskManager(Path path) {
         file = path;
@@ -73,15 +73,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private String taskToString(Task task) {
         if (task instanceof Subtask) {
 
-            return String.format("%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName()
-                    , task.getStatus(), task.getDescription(), ((Subtask) task).getIdOfEpic());
+            return String.format("%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
+                    task.getStatus(), task.getDescription(), ((Subtask) task).getIdOfEpic());
 
         } else if (task instanceof Epic) {
-            return String.format("%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName()
-                    , task.getStatus(), task.getDescription(), ((Epic) task).getSubtasksOfEpic().size());
+            return String.format("%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
+                    task.getStatus(), task.getDescription(), ((Epic) task).getSubtasksOfEpic().size());
         } else {
-            return String.format("%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName()
-                    , task.getStatus(), task.getDescription());
+            return String.format("%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
+                    task.getStatus(), task.getDescription());
 
         }
     }
@@ -115,8 +115,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             return task;
         } else if (value.contains("SUBTASK")) {
             String[] arrayTask = value.split(",");
-            Subtask subtask = new Subtask(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3])
-                    , Integer.parseInt(arrayTask[5]));
+            Subtask subtask = new Subtask(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]),
+                    Integer.parseInt(arrayTask[5]));
             return subtask;
         } else {
             String[] arrayTask = value.split(",");
