@@ -1,6 +1,6 @@
 package managers;
 
-import tasks.*;
+import domain.*;
 
 import java.util.*;
 

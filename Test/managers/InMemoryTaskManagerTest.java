@@ -1,10 +1,10 @@
 package managers;
 
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.Status;
-import tasks.Subtask;
-import tasks.Task;
+import domain.Epic;
+import domain.Status;
+import domain.Subtask;
+import domain.Task;
 
 import java.util.ArrayList;
 import java.util.List;
