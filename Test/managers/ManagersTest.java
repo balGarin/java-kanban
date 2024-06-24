@@ -9,6 +9,7 @@ class ManagersTest {
 
     @Test
     void shouldGetDefaultReturnInMemoryTaskManager() {
+
         TaskManager manager = Managers.getDefault();
         TaskManager manager1 = new InMemoryTaskManager();
         assertTrue(manager.getClass().isInstance(manager1), "Объект возвращается не корректно");
