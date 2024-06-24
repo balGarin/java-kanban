@@ -8,13 +8,14 @@ public class Task {
     private Status status;
     private int id;
 
-    private String type;
+    private Type type;
+
 
     public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
         this.status = status;
-        type = "Task";
+        type = Type.TASK;
     }
 
     public String getName() {
@@ -51,11 +52,11 @@ public class Task {
     }
 
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
