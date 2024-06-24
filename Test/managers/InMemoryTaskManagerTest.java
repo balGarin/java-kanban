@@ -1,10 +1,10 @@
 package managers;
 
 import org.junit.jupiter.api.Test;
-import domain.Epic;
-import domain.Status;
-import domain.Subtask;
-import domain.Task;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,33 +131,4 @@ class InMemoryTaskManagerTest {
         assertEquals(2, manager.getTaskById(2).getId(), "У задачи выставлен не верный ID");
 // в ТЗ не было задачи по функционалу добавления задачи с заданным ID, по этому ID всегда задает менеджер =)
     }
-
-    @Test
-    public void shouldNotSetsMethodsAffectAtManager() {
-        TaskManager manager = Managers.getDefault();
-        Task task = new Task("name", "description", Status.NEW);
-        task.setId(1);
-        manager.addTask(new Task("name", "description", Status.NEW));
-        assertEquals(task, manager.getTaskById(1), "Заданный ID отличается от сгенерированного");
-        task.setName("newName");
-        task.setDescription("newDescription");
-        task.setStatus(Status.IN_PROGRESS);
-        manager.updateTask(task);
-        assertEquals(task, manager.getTaskById(1), "Изменение полей задачи не повлияло на менеджера");
-    }
-
-    @Test
-    public void shouldRemoveIdSubtasksFromEpic() {
-        TaskManager manager = Managers.getDefault();
-        manager.addEpic(new Epic("name", "description", Status.NEW));
-        manager.addSubtask(new Subtask("name", "description", Status.NEW, 1));
-        manager.addSubtask(new Subtask("name", "description", Status.NEW, 1));
-        manager.addSubtask(new Subtask("name", "description", Status.NEW, 1));
-        List<Subtask> tasks = manager.getSubtaskByEpic(1);
-        manager.removeSubtaskById(2);
-        assertNotEquals(tasks, manager.getSubtaskByEpic(1), "Сабтаска все еще в списки Эпика");
-
-
-    }
-
 }

@@ -1,8 +1,8 @@
 package managers;
 
-import domain.Epic;
-import domain.Subtask;
-import domain.Task;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.List;
 
