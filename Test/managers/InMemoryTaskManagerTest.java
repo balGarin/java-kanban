@@ -15,6 +15,14 @@ class InMemoryTaskManagerTest {
     @Test
     public void shouldAddTaskInMemoryTaskManager() {
 
+
+
+
+
+
+
+
+
         TaskManager manager = Managers.getDefault();
         Task task = new Task("name", "description", Status.NEW);
         manager.addTask(task);
