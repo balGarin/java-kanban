@@ -3,6 +3,7 @@ package domain;
 import java.util.Objects;
 
 public class Task {
+
     private String name;
     private String description;
     private Status status;
@@ -14,7 +15,7 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
-        type = "Task";
+        type = "tasks.Task";
     }
 
     public String getName() {

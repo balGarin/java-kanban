@@ -5,12 +5,13 @@ import java.util.List;
 
 public class Epic extends Task {
 
+
     private List<Subtask> subtasksOfEpic;
 
     public Epic(String name, String description, Status status) {
         super(name, description, status);
         subtasksOfEpic = new ArrayList<>();
-        setType("Epic");
+        setType("tasks.Epic");
     }
 
 
@@ -23,7 +24,7 @@ public class Epic extends Task {
     }
 
     public List<Subtask> getSubtasksOfEpic() {
-        return new ArrayList<>(subtasksOfEpic);
+        return subtasksOfEpic;
     }
 
     public void removeSubtask(Subtask subtask) {
