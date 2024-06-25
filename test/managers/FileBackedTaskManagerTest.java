@@ -3,41 +3,36 @@ package managers;
 import domain.*;
 import org.junit.jupiter.api.Test;
 
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest {
-    File file = File.createTempFile("test", ".txt");
-
-    FileBackedTaskManagerTest() throws IOException {
-    }
 
 
     @Test
-    void shouldSaveAndLoadEmptyFile() {
+    void shouldSaveAndLoadEmptyFile() throws IOException {
+        File file = File.createTempFile("test", ".txt");
         FileBackedTaskManager manager = new FileBackedTaskManager(file.toPath());
-        boolean thrown = false;
-        try {
-            manager.save();
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertFalse(thrown, "Файл не сохранился");
-        try {
-            FileBackedTaskManager manager1 = FileBackedTaskManager.loadFromFile(file.toPath());
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertFalse(thrown, "Файл не загрузился");
+        manager.save();
+        String string = Files.readString(file.toPath());
+        assertNotNull(string, "Заголовок не сохранился");
+        FileBackedTaskManager manager1 = FileBackedTaskManager.loadFromFile(file.toPath());
+        assertEquals(manager.getSubtasks(), manager1.getSubtasks(), "Пустой файл не загрузился");
+        assertEquals(manager.getEpics(), manager1.getEpics(), "Пустой файл не загрузился");
+        assertEquals(manager.getTasks(), manager1.getTasks(), "Пустой файл не загрузился");
 
     }
 
     @Test
-    void shouldSaveAndLoadSeveralTasks() {
+    void shouldSaveAndLoadSeveralTasks() throws IOException {
+        File file = File.createTempFile("test", ".txt");
         FileBackedTaskManager manager = new FileBackedTaskManager(file.toPath());
         List<Task> tasks = new ArrayList<>();
         Task task = new Task("name", "description", Status.NEW);
@@ -58,7 +53,8 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void shouldSaveInFileAfterUpdate() {
+    void shouldSaveInFileAfterUpdate() throws IOException {
+        File file = File.createTempFile("test", ".txt");
         FileBackedTaskManager manager = new FileBackedTaskManager(file.toPath());
         List<Task> tasks = new ArrayList<>();
         Task task = new Task("name", "description", Status.NEW);
@@ -76,5 +72,6 @@ class FileBackedTaskManagerTest {
         tasksUploaded.add(managerUploaded.getEpicById(2));
         assertEquals(tasks, tasksUploaded, "Файл не сохранил изменения");
     }
+
 
 }
