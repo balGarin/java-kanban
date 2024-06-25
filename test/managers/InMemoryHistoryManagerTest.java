@@ -12,7 +12,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
-
     @Test
     void shouldAddTaskInHistory() {
         TaskManager manager = Managers.getDefault();

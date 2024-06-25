@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagersTest {
-
     @Test
     void shouldGetDefaultReturnInMemoryTaskManager() {
 
@@ -16,8 +15,6 @@ class ManagersTest {
 
 
     }
-
-
     @Test
     void shouldGetDefaultHistoryReturnInMemoryHistoryManager() {
         HistoryManager historyManager = Managers.getDefaultHistory();

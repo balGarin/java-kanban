@@ -1,8 +1,6 @@
 package domain;
 
 public class Subtask extends Task {
-
-
     private int idOfEpic;
 
     public Subtask(String name, String description, Status status, int idOfEpic) {

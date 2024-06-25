@@ -11,8 +11,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest {
-
-
     File file = File.createTempFile("test", ".txt");
 
     FileBackedTaskManagerTest() throws IOException {
