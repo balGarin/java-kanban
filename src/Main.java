@@ -1,12 +1,13 @@
 
+
 import managers.*;
+
+import java.nio.file.Paths;
 
 
 public class Main {
-
     public static void main(String[] args) {
-        TaskManager manager = Managers.getDefault();
+        FileBackedTaskManager manager = new FileBackedTaskManager(Paths.get("kanban.txt"));
+
     }
-
-
 }

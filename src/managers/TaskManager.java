@@ -7,6 +7,7 @@ import domain.Task;
 import java.util.List;
 
 public interface TaskManager {
+
     void addTask(Task task);
 
     void addSubtask(Subtask subtask);

@@ -6,17 +6,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagersTest {
-
     @Test
     void shouldGetDefaultReturnInMemoryTaskManager() {
+
         TaskManager manager = Managers.getDefault();
         TaskManager manager1 = new InMemoryTaskManager();
         assertTrue(manager.getClass().isInstance(manager1), "Объект возвращается не корректно");
 
 
     }
-
-
     @Test
     void shouldGetDefaultHistoryReturnInMemoryHistoryManager() {
         HistoryManager historyManager = Managers.getDefaultHistory();

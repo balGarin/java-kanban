@@ -148,6 +148,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void shouldRemoveIdSubtasksFromEpic() {
+
         TaskManager manager = Managers.getDefault();
         manager.addEpic(new Epic("name", "description", Status.NEW));
         manager.addSubtask(new Subtask("name", "description", Status.NEW, 1));
