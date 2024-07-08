@@ -54,16 +54,36 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+    @Override
+    public void removeTaskById(int id) {
+        super.removeTaskById(id);
+        save();
+    }
+
+    @Override
+    public void removeSubtaskById(int id) {
+        super.removeSubtaskById(id);
+        save();
+    }
+
+    @Override
+    public void removeEpicById(int id) {
+        super.removeEpicById(id);
+        save();
+    }
+
     void save() {
         IdTaskComparator comparator = new IdTaskComparator();
-        TreeSet<Task> allTasks = new TreeSet<>(comparator);
-        allTasks.addAll(getTasks());
-        allTasks.addAll(getEpics());
-        allTasks.addAll(getSubtasks());
         try (FileWriter writer = new FileWriter(file.toFile())) {
             writer.write(heading + "\n");
-            for (Task task : allTasks) {
+            for (Task task : getTasks()) {
                 writer.write(taskToString(task));
+            }
+            for (Epic epic : getEpics()) {
+                writer.write(taskToString(epic));
+            }
+            for (Subtask subtask : getSubtasks()) {
+                writer.write(taskToString(subtask));
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при записи в файл!!!");
@@ -91,25 +111,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static FileBackedTaskManager loadFromFile(Path path) {
         try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
             FileBackedTaskManager manager = new FileBackedTaskManager(path);
+            int maxId = 0;
             while (reader.ready()) {
                 final String taskString = reader.readLine();
                 if (taskString.equals(manager.heading)) {
                     continue;
                 }
                 Task task = manager.fromString(taskString);
+                if (maxId < task.getId()) {
+                    maxId = task.getId();
+                }
                 if (task.getType().equals(Type.TASK)) {
-                    manager.addTask(task);
+                    manager.updateTask(task);
                 } else if (task.getType().equals(Type.SUBTASK)) {
-                    manager.addSubtask((Subtask) task);
+                    manager.getEpicById(((Subtask) task).getIdOfEpic()).setSubtasksOfEpic((Subtask) task);
+                    manager.updateSubtask((Subtask) task);
                 } else {
-                    manager.addEpic((Epic) task);
+                    manager.updateEpic((Epic) task);
                 }
             }
+            manager.setId(maxId);
             return manager;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private Task fromString(String value) {
@@ -117,12 +142,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         Type type = Type.valueOf(arrayTask[1]);
         if (type.equals(Type.TASK)) {
-            return new Task(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]));
+            Task task = new Task(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]));
+            task.setId(Integer.parseInt(arrayTask[0]));
+            return task;
         } else if (type.equals(Type.SUBTASK)) {
-            return new Subtask(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]),
+            Subtask subtask = new Subtask(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]),
                     Integer.parseInt(arrayTask[5]));
+            subtask.setId(Integer.parseInt(arrayTask[0]));
+            return subtask;
+
         } else {
-            return new Epic(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]));
+            Epic epic = new Epic(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]));
+            epic.setId(Integer.parseInt(arrayTask[0]));
+            return epic;
 
         }
 

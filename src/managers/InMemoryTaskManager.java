@@ -188,6 +188,12 @@ InMemoryTaskManager implements TaskManager {
             epic.setStatus(Status.IN_PROGRESS);
         }
     }
+    @Override
+    public void setId(int id){
+      this.id=id;
+    }
+
+
 
 
 }

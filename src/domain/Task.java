@@ -1,5 +1,8 @@
 package domain;
 
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -7,6 +10,8 @@ public class Task {
     private String description;
     private Status status;
     private int id;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     private Type type;
 
@@ -15,6 +20,15 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
+        type = Type.TASK;
+    }
+
+    public Task(String name, String description, Status status,LocalDateTime startTime,Duration duration){
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startTime=startTime;
+        this.duration=duration;
         type = Type.TASK;
     }
 
@@ -48,7 +62,7 @@ public class Task {
     }
 
     public void setId(int id) {
-        this.id = id;
+       this.id=id;
     }
 
 
@@ -58,6 +72,27 @@ public class Task {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+
+    public  LocalDateTime getEndTime(){
+        return startTime.plus(duration);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     @Override
