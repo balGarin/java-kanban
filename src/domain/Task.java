@@ -23,12 +23,12 @@ public class Task {
         type = Type.TASK;
     }
 
-    public Task(String name, String description, Status status,LocalDateTime startTime,Duration duration){
+    public Task(String name, String description, Status status, LocalDateTime startTime, Duration duration) {
         this.name = name;
         this.description = description;
         this.status = status;
-        this.startTime=startTime;
-        this.duration=duration;
+        this.startTime = startTime;
+        this.duration = duration;
         type = Type.TASK;
     }
 
@@ -62,7 +62,7 @@ public class Task {
     }
 
     public void setId(int id) {
-       this.id=id;
+        this.id = id;
     }
 
 
@@ -75,7 +75,7 @@ public class Task {
     }
 
 
-    public  LocalDateTime getEndTime(){
+    public LocalDateTime getEndTime() {
         return startTime.plus(duration);
     }
 
