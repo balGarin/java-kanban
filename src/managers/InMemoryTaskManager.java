@@ -198,8 +198,8 @@ InMemoryTaskManager implements TaskManager {
     @Override
     public void removeEpicById(int id) {
         Epic epic = epics.get(id);
-        epic.getSubtasksOfEpic().stream().
-                map(subtask -> {
+        epic.getSubtasksOfEpic().stream()
+                        .map(subtask -> {
                     subtasks.remove(subtask.getId());
                     historyManager.remove(subtask.getId());
                     priorityList.remove(subtask);
