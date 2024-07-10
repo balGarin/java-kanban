@@ -113,10 +113,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String taskToString(Task task) {
         if (task.getStartTime() == null) {
-            if (task instanceof Subtask) {
+            if (task.getType().equals(Type.SUBTASK)) {
                 return String.format("%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
                         task.getStatus(), task.getDescription(), ((Subtask) task).getIdOfEpic());
-            } else if (task instanceof Epic) {
+            } else if (task.getType().equals(Type.EPIC)) {
                 return String.format("%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
                         task.getStatus(), task.getDescription(), ((Epic) task).getSubtasksOfEpic().size());
             } else {
@@ -124,11 +124,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         task.getStatus(), task.getDescription());
             }
         } else {
-            if (task instanceof Subtask) {
+            if (task.getType().equals(Type.SUBTASK)) {
                 return String.format("%s,%s,%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
                         task.getStatus(), task.getDescription(), ((Subtask) task).getIdOfEpic(), task.getStartTime(),
                         task.getDuration().toMinutes());
-            } else if (task instanceof Epic) {
+            } else if (task.getType().equals(Type.EPIC)) {
                 return String.format("%s,%s,%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
                         task.getStatus(), task.getDescription(), ((Epic) task).getSubtasksOfEpic().size(),
                         task.getStartTime(), task.getDuration().toMinutes());
@@ -173,7 +173,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String[] arrayTask = value.split(",");
 
         Type type = Type.valueOf(arrayTask[1]);
-        if (arrayTask.length < 7) {
+        try {
+            if (type.equals(Type.TASK)) {
+                Task task = new Task(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]),
+                        LocalDateTime.parse(arrayTask[6]), Duration.ofMinutes(Long.parseLong(arrayTask[7])));
+                task.setId(Integer.parseInt(arrayTask[0]));
+                return task;
+            } else if (type.equals(Type.SUBTASK)) {
+                Subtask subtask = new Subtask(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]),
+                        Integer.parseInt(arrayTask[5]), LocalDateTime.parse(arrayTask[6]),
+                        Duration.ofMinutes(Long.parseLong(arrayTask[7])));
+                subtask.setId(Integer.parseInt(arrayTask[0]));
+                return subtask;
+            } else {
+                Epic epic = new Epic(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]));
+                epic.setId(Integer.parseInt(arrayTask[0]));
+                return epic;
+            }
+        } catch (IndexOutOfBoundsException e) {
             if (type.equals(Type.TASK)) {
                 Task task = new Task(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]));
                 task.setId(Integer.parseInt(arrayTask[0]));
@@ -187,27 +204,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 Epic epic = new Epic(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]));
                 epic.setId(Integer.parseInt(arrayTask[0]));
                 return epic;
-
-            }
-        } else {
-            if (type.equals(Type.TASK)) {
-                Task task = new Task(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]),
-                        LocalDateTime.parse(arrayTask[6]), Duration.ofMinutes(Long.parseLong(arrayTask[7])));
-                task.setId(Integer.parseInt(arrayTask[0]));
-                return task;
-            } else if (type.equals(Type.SUBTASK)) {
-                Subtask subtask = new Subtask(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]),
-                        Integer.parseInt(arrayTask[5]), LocalDateTime.parse(arrayTask[6]),
-                        Duration.ofMinutes(Long.parseLong(arrayTask[7])));
-                subtask.setId(Integer.parseInt(arrayTask[0]));
-                return subtask;
-
-            } else {
-                Epic epic = new Epic(arrayTask[2], arrayTask[4], Status.valueOf(arrayTask[3]));
-                epic.setId(Integer.parseInt(arrayTask[0]));
-                return epic;
             }
         }
-
     }
 }
