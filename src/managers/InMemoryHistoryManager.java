@@ -29,7 +29,6 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        System.out.println(history);
         return new ArrayList<>(getTasks());
     }
 
@@ -84,10 +83,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         List<Task> sortHistory = new ArrayList<>();
         if (head != null) {
             Node<Task> curNode = head;
-            sortHistory.add(curNode.date);
+            sortHistory.add(curNode.data);
             for (int i = 0; i < size - 1; i++) {
                 curNode = curNode.next;
-                sortHistory.add(curNode.date);
+                sortHistory.add(curNode.data);
             }
             return sortHistory;
 
