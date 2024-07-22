@@ -3,6 +3,7 @@ package managers;
 import domain.*;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class
@@ -155,6 +156,7 @@ InMemoryTaskManager implements TaskManager {
     public void updateTask(Task task) {
         tasks.put(task.getId(), task);
         if (task.getStartTime() != null) {
+            priorityList.removeIf(task1 -> task1.getId()==task.getId());
             if (priorityList.stream().filter(task1 -> checkTheIntersection(task1, task)).count() == 0) {
                 priorityList.add(task);
             }
@@ -166,6 +168,7 @@ InMemoryTaskManager implements TaskManager {
         subtasks.put(subtask.getId(), subtask);
         updateStatusOfEpic(epics.get(subtask.getIdOfEpic()));  //UPDATE
         if (subtask.getStartTime() != null) {
+            priorityList.removeIf(subtask1 -> subtask1.getId()==subtask.getId());
             if (priorityList.stream().filter(task1 -> checkTheIntersection(task1, subtask)).count() == 0) {
                 priorityList.add(subtask);
             }
