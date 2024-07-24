@@ -5,23 +5,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class Epic extends Task {
     private List<Subtask> subtasksOfEpic;
-    private int sizeOfSubtasks ;
+    private int sizeOfSubtasks;
 
 
     private LocalDateTime endTime;
 
 
-
-
     public Epic(String name, String description, Status status) {
         super(name, description, status);
         setType(Type.EPIC);
-        subtasksOfEpic=new ArrayList<>();
+        subtasksOfEpic = new ArrayList<>();
     }
 
     public void setSubtasksOfEpic(Subtask subtask) {
@@ -57,36 +54,36 @@ public class Epic extends Task {
     }
 
     private void calculationTimeDotsOfEpic() {
-        List<Subtask>subtasksWithTime= subtasksOfEpic.stream()
+        List<Subtask> subtasksWithTime = subtasksOfEpic.stream()
                 .filter(subtask -> subtask.getStartTime() != null)
                 .sorted(Comparator.comparing(Task::getStartTime)).toList();
-           setStartTime(subtasksWithTime.get(0).getStartTime());
-           setEndTime(subtasksWithTime.get(subtasksWithTime.size() - 1).getEndTime());
-           long sumDuration = subtasksWithTime.stream()
-                   .map(subtask -> subtask.getDuration().toMinutes())
-                   .mapToLong(Long::longValue).sum();
-           setDuration(Duration.ofMinutes(sumDuration));
+        setStartTime(subtasksWithTime.get(0).getStartTime());
+        setEndTime(subtasksWithTime.get(subtasksWithTime.size() - 1).getEndTime());
+        long sumDuration = subtasksWithTime.stream()
+                .map(subtask -> subtask.getDuration().toMinutes())
+                .mapToLong(Long::longValue).sum();
+        setDuration(Duration.ofMinutes(sumDuration));
     }
 
     public void setSubtasksOfEpic(List<Subtask> subtasksOfEpic) {
         this.subtasksOfEpic = subtasksOfEpic;
     }
 
-    private void setSizeOfSubtasks(){
-        if(subtasksOfEpic==null){
-            sizeOfSubtasks=0;
-        }else{
-            sizeOfSubtasks=subtasksOfEpic.size();
+    private void setSizeOfSubtasks() {
+        if (subtasksOfEpic == null) {
+            sizeOfSubtasks = 0;
+        } else {
+            sizeOfSubtasks = subtasksOfEpic.size();
         }
     }
 
-    public int getSizeOfSubtasks() {
+    public int getSizeOfSubtasksList() {
         return sizeOfSubtasks;
     }
 
     @Override
     public String toString() {
-        return "EPIC" +
+        return "Epic" +
                 "{name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +

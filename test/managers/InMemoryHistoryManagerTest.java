@@ -49,7 +49,8 @@ class InMemoryHistoryManagerTest {
         manager.getSubtaskById(3);
         manager.getSubtaskById(4);
         manager.removeEpicById(1);
-        assertEquals(0, manager.getHistory().size(), "Сабтаски не были удалены после удаления их Эпика");
+        assertEquals(0, manager.getHistory().size()
+                , "Сабтаски не были удалены после удаления их Эпика");
     }
 
     @Test

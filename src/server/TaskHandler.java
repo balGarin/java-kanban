@@ -1,8 +1,7 @@
 package server;
 
 import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import domain.Status;
@@ -13,12 +12,10 @@ import managers.TaskManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
+
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 
 public class TaskHandler implements HttpHandler {
@@ -73,7 +70,8 @@ public class TaskHandler implements HttpHandler {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
         }
     }
 
@@ -107,7 +105,8 @@ public class TaskHandler implements HttpHandler {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
 
@@ -122,14 +121,20 @@ public class TaskHandler implements HttpHandler {
         } else if (pathParts.length == 3) {
             Optional<Integer> id = getTaskId(pathParts[2]);
             if (id.isPresent()) {
-                manager.removeTaskById(id.get());
-                writeResponse(exchange, "Задача удалена успешно!", 201);
+                if (manager.removeTaskById(id.get())) {
+                    writeResponse(exchange, "Задача удалена успешно!", 201);
+
+                } else {
+                    writeResponse(exchange, "Задача не найдена", 404);
+                }
+
             } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
 
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
 
@@ -139,9 +144,6 @@ public class TaskHandler implements HttpHandler {
     Optional<Integer> getTaskId(String id) {
 
         try {
-            if (manager.getTaskById(Integer.parseInt(id)) == null) {
-                return Optional.empty();
-            }
             return Optional.of(Integer.parseInt(id));
         } catch (NumberFormatException e) {
             return Optional.empty();
@@ -185,55 +187,12 @@ public class TaskHandler implements HttpHandler {
 
 }
 
-class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
-
-    @Override
-    public void write(final JsonWriter jsonWriter, final LocalDateTime localDateTime) throws IOException {
-        if (localDateTime == null) {
-            jsonWriter.nullValue();
-        } else {
-            jsonWriter.value(localDateTime.format(dtf));
-        }
-    }
-
-    @Override
-    public LocalDateTime read(final JsonReader jsonReader) throws IOException {
-        try {
-            return LocalDateTime.parse(jsonReader.nextString(), dtf);
-        } catch (IllegalStateException e) {
-            jsonReader.nextNull();
-        }
-        return null;
 
 
-    }
-}
-
-class DurationAdapter extends TypeAdapter<Duration> {
 
 
-    @Override
-    public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
-        if (duration == null) {
-            jsonWriter.nullValue();
-            return;
-        }
-        jsonWriter.value(duration.toMinutes());
-    }
 
 
-    @Override
-    public Duration read(JsonReader jsonReader) throws IOException {
-        try {
-           return Duration.ofMinutes(jsonReader.nextInt());
-        } catch (IllegalStateException e) {
-            jsonReader.nextNull();
-        }
-        return null;
-
-    }
-}
 
 
 

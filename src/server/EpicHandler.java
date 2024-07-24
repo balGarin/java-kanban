@@ -2,10 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import domain.*;
@@ -13,13 +10,10 @@ import managers.TaskManager;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 public class EpicHandler extends TaskHandler implements HttpHandler {
@@ -56,22 +50,24 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
         } else if (pathParts.length == 4) {
             Optional<Integer> id = getTaskId(pathParts[2]);
             if (pathParts[3].equals("subtasks")) {
-                if(id.isPresent()){
-                Gson gson = new GsonBuilder().setPrettyPrinting()
-                        .registerTypeAdapter(Duration.class, new DurationAdapter())
-                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                        .serializeNulls()
-                        .create();
-                String response = gson.toJson(manager.getEpicById(id.get()).getSubtasksOfEpic());
-                writeResponse(exchange, response, 200);
-            }else {
-                    writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+                if (id.isPresent()) {
+                    Gson gson = new GsonBuilder().setPrettyPrinting()
+                            .registerTypeAdapter(Duration.class, new DurationAdapter())
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                            .serializeNulls()
+                            .create();
+                    String response = gson.toJson(manager.getEpicById(id.get()).getSubtasksOfEpic());
+                    writeResponse(exchange, response, 200);
+                } else {
+                    writeResponse(exchange
+                            , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
                 }
-            }else {
+            } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
         }
     }
 
@@ -90,7 +86,8 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
             }
 
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
 
@@ -130,14 +127,18 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
         } else if (pathParts.length == 3) {
             Optional<Integer> id = getTaskId(pathParts[2]);
             if (id.isPresent()) {
-                manager.removeEpicById(id.get());
-                writeResponse(exchange, "Задача удалена успешно!", 201);
+                if (manager.removeEpicById(id.get())) {
+                    writeResponse(exchange, "Задача удалена успешно!", 201);
+                } else {
+                    writeResponse(exchange, "Задача не найдена", 404);
+                }
             } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
 
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
     }
@@ -155,24 +156,5 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
     }
 }
 
-//    Optional<List<Subtask>>getListOfSubtasksFromBody(InputStream stream) throws IOException {
-//        String jsonList = new String(stream.readAllBytes(),StandardCharsets.UTF_8);
-//        if(jsonList.isEmpty()){
-//            return Optional.empty();
-//        }
-//        Gson gson = new GsonBuilder().setPrettyPrinting()
-//                .registerTypeAdapter(Duration.class, new DurationAdapter())
-//                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-//                .serializeNulls()
-//                .create();
-//        List<Subtask>listSubtasksOfEpic = gson.fromJson(jsonList,new UserListTypeToken().getType());
-//        return Optional.of(listSubtasksOfEpic);
-//    }
-//
-//
-//
-//}
-//class UserListTypeToken extends TypeToken<List<Subtask>> {
-//
-//}
+
 

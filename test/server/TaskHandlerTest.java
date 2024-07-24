@@ -33,11 +33,13 @@ class TaskHandlerTest {
     @Test
     void shouldCorrectAddTask() throws IOException, InterruptedException {
         server.start();
-        Task task = new Task("name", "description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
+        Task task = new Task("name", "description"
+                , Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
         String jsonTask = gson.toJson(task);
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks");
-        HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(jsonTask)).build();
+        HttpRequest request = HttpRequest.newBuilder().uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(jsonTask)).build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(201, response.statusCode());
         List<Task> tasksFromManager = manager.getTasks();
@@ -50,14 +52,17 @@ class TaskHandlerTest {
     @Test
     void shouldCorrectUpdateTask() throws IOException, InterruptedException {
         server.start();
-        Task oldTask = new Task("name", "description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
+        Task oldTask = new Task("name", "description"
+                , Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
         manager.addTask(oldTask);
-        Task updateTask = new Task("newName", "newDescription", Status.IN_PROGRESS, LocalDateTime.now(), Duration.ofMinutes(20));
+        Task updateTask = new Task("newName", "newDescription"
+                , Status.IN_PROGRESS, LocalDateTime.now(), Duration.ofMinutes(20));
         updateTask.setId(1);
         String jsonTask = gson.toJson(updateTask);
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/1");
-        HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(jsonTask)).build();
+        HttpRequest request = HttpRequest.newBuilder().uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(jsonTask)).build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(201, response.statusCode());
         Task taskFromManager = manager.getTaskById(1);
@@ -72,7 +77,8 @@ class TaskHandlerTest {
     @Test
     void shouldGetTask() throws IOException, InterruptedException {
         server.start();
-        Task task = new Task("name", "description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
+        Task task = new Task("name", "description"
+                , Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
         manager.addTask(task);
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/1");
@@ -88,7 +94,8 @@ class TaskHandlerTest {
     @Test
     void shouldCorrectGetListOfTasks() throws IOException, InterruptedException {
         server.start();
-        Task task1 = new Task("name", "description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
+        Task task1 = new Task("name", "description"
+                , Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
         manager.addTask(task1);
         Task task2 = new Task("name1", "description2", Status.NEW);
         manager.addTask(task2);
@@ -107,7 +114,8 @@ class TaskHandlerTest {
     @Test
     void shouldRemoveTask() throws IOException, InterruptedException {
         server.start();
-        Task task = new Task("name", "description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
+        Task task = new Task("name", "description"
+                , Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
         manager.addTask(task);
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/1");
@@ -123,7 +131,8 @@ class TaskHandlerTest {
     @Test
     void shouldRemoveAllTasks() throws IOException, InterruptedException {
         server.start();
-        Task task1 = new Task("name", "description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
+        Task task1 = new Task("name", "description"
+                , Status.NEW, LocalDateTime.now(), Duration.ofMinutes(15));
         Task task2 = new Task("name1", "description2", Status.NEW);
         manager.addTask(task1);
         manager.addTask(task2);
@@ -137,19 +146,21 @@ class TaskHandlerTest {
         server.stop();
 
     }
+
     @Test
-    void shouldCorrectStatusCodesWithErrors()throws IOException, InterruptedException{
+    void shouldReturnCorrectStatusCodeWithError() throws IOException, InterruptedException {
         server.start();
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/1");
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(404,response.statusCode(),"Ошибка");
+        assertEquals(404, response.statusCode(), "Ошибка");
         server.stop();
 
     }
 
+    class TaskListTypeToken extends TypeToken<List<Task>> {
+    }
+
 }
 
-class TaskListTypeToken extends TypeToken<List<Task>> {
-}

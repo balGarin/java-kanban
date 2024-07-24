@@ -7,8 +7,6 @@ public class Subtask extends Task {
     private int idOfEpic;
 
 
-
-
     public Subtask(String name, String description, Status status, int idOfEpic) {
         super(name, description, status);
         this.idOfEpic = idOfEpic;
@@ -29,13 +27,10 @@ public class Subtask extends Task {
         return idOfEpic;
     }
 
-    public void setIdOfEpic(int idOfEpic) {
-        this.idOfEpic = idOfEpic;
-    }
 
     @Override
     public String toString() {
-        return "SUBTASK" +
+        return "Subtask" +
                 "{name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +

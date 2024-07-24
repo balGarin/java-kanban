@@ -22,7 +22,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public boolean addTask(Task task) {
-        if(super.addTask(task)){
+        if (super.addTask(task)) {
             save();
             return true;
         }
@@ -32,7 +32,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public boolean addSubtask(Subtask subtask) {
-        if(super.addSubtask(subtask)) {
+        if (super.addSubtask(subtask)) {
             save();
             return true;
         }
@@ -41,17 +41,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public boolean addEpic(Epic epic) {
-       if( super.addEpic(epic)) {
-           save();
-           return true;
-       }
-       return false;
+        if (super.addEpic(epic)) {
+            save();
+            return true;
+        }
+        return false;
 
     }
 
     @Override
     public boolean updateTask(Task task) {
-        if(super.updateTask(task)) {
+        if (super.updateTask(task)) {
             save();
             return true;
         }
@@ -60,7 +60,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public boolean updateSubtask(Subtask subtask) {
-        if(super.updateSubtask(subtask)) {
+        if (super.updateSubtask(subtask)) {
             save();
             return true;
         }
@@ -69,7 +69,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public boolean updateEpic(Epic epic) {
-        if(super.updateEpic(epic)) {
+        if (super.updateEpic(epic)) {
             save();
             return true;
         }
@@ -77,21 +77,32 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void removeTaskById(int id) {
-        super.removeTaskById(id);
-        save();
+    public boolean removeTaskById(int id) {
+        if (super.removeTaskById(id)) {
+            save();
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void removeSubtaskById(int id) {
-        super.removeSubtaskById(id);
-        save();
+    public boolean removeSubtaskById(int id) {
+        if (super.removeSubtaskById(id)) {
+            save();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public void removeEpicById(int id) {
-        super.removeEpicById(id);
-        save();
+    public boolean removeEpicById(int id) {
+        if (super.removeEpicById(id)) {
+            save();
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -138,7 +149,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         task.getStatus(), task.getDescription(), ((Subtask) task).getIdOfEpic());
             } else if (task.getType().equals(Type.EPIC)) {
                 return String.format("%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
-                        task.getStatus(),task.getDescription(),((Epic)task).getSubtasksOfEpic().size());
+                        task.getStatus(), task.getDescription(), ((Epic) task).getSizeOfSubtasksList());
 
             } else {
                 return String.format("%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
@@ -151,7 +162,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         task.getDuration().toMinutes());
             } else if (task.getType().equals(Type.EPIC)) {
                 return String.format("%s,%s,%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
-                        task.getStatus(), task.getDescription(), ((Epic)task).getSubtasksOfEpic().size(),
+                        task.getStatus(), task.getDescription(), ((Epic) task).getSizeOfSubtasksList(),
                         task.getStartTime(), task.getDuration().toMinutes());
             } else {
                 return String.format("%s,%s,%s,%s,%s,----,%s,%s%n", task.getId(), task.getType(), task.getName(),
@@ -170,7 +181,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 if (taskString.equals(manager.heading)) {
                     continue;
                 }
-                    Task task = manager.fromString(taskString);
+                Task task = manager.fromString(taskString);
 
                 if (maxId < task.getId()) {
                     maxId = task.getId();
@@ -183,7 +194,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 } else {
                     manager.updateEpic((Epic) task);
                 }
-                }
+            }
             manager.setId(maxId);
             return manager;
         } catch (IOException e) {

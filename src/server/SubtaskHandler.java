@@ -23,8 +23,9 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
     public SubtaskHandler(TaskManager manager) {
         super(manager);
     }
-@Override
-     void handleGetRequest(HttpExchange exchange) throws IOException {
+
+    @Override
+    void handleGetRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         if (pathParts.length == 2) {
@@ -49,10 +50,12 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
         }
     }
-   @Override
+
+    @Override
     void handlePostRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
@@ -73,23 +76,25 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
             Optional<Integer> id = getTaskId(pathParts[2]);
 
             if (optionalTask.isPresent() && id.isPresent()) {
-                if(manager.updateSubtask((Subtask) optionalTask.get())){
+                if (manager.updateSubtask((Subtask) optionalTask.get())) {
                     writeResponse(exchange, "Задача успешно обновлена!", 201);
 
-                }else {
+                } else {
                     writeResponse(exchange
-                            ,"Задача пересекается во времени,или ее Эпик был удален!",406);
+                            , "Задача пересекается во времени,или ее Эпик был удален!", 406);
                 }
             } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
 
     }
-   @Override
+
+    @Override
     Optional<Task> getTaskFromBody(InputStream stream) throws IOException {
         String jsonTask = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         if (jsonTask.isEmpty()) {
@@ -124,14 +129,19 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
         } else if (pathParts.length == 3) {
             Optional<Integer> id = getTaskId(pathParts[2]);
             if (id.isPresent()) {
-                manager.removeSubtaskById(id.get());
-                writeResponse(exchange, "Задача удалена успешно!", 201);
+                if (manager.removeSubtaskById(id.get())) {
+                    writeResponse(exchange, "Задача удалена успешно!", 201);
+
+                } else {
+                    writeResponse(exchange, "Задача не найдена", 404);
+                }
             } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
 
         } else {
-            writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange
+                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
     }

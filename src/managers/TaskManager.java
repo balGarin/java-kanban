@@ -38,11 +38,11 @@ public interface TaskManager {
 
     boolean updateEpic(Epic epic);
 
-    void removeTaskById(int id);
+    boolean removeTaskById(int id);
 
-    void removeSubtaskById(int id);
+    boolean removeSubtaskById(int id);
 
-    void removeEpicById(int id);
+    boolean removeEpicById(int id);
 
     List<Subtask> getSubtaskByEpic(int idOfEpic);
 
