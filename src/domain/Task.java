@@ -8,19 +8,20 @@ import java.util.Objects;
 public class Task {
     private String name;
     private String description;
-    private Status status;
+    private Status status ;
     private int id;
     private Duration duration;
-    private LocalDateTime startTime;
+     private LocalDateTime startTime;
 
-    private Type type;
+    private Type type ;
 
 
     public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
         this.status = status;
-        type = Type.TASK;
+        setType(Type.TASK);
+
     }
 
     public Task(String name, String description, Status status, LocalDateTime startTime, Duration duration) {
@@ -29,7 +30,8 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         this.duration = duration;
-        type = Type.TASK;
+        setType(Type.TASK);
+
     }
 
     public String getName() {
@@ -97,13 +99,18 @@ public class Task {
 
     @Override
     public String toString() {
-        return type +
+        return "Task" +
                 "{name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", id=" + id +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
                 '}';
     }
+
+
+
 
     @Override
     public boolean equals(Object o) {
