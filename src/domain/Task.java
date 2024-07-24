@@ -8,12 +8,12 @@ import java.util.Objects;
 public class Task {
     private String name;
     private String description;
-    private Status status ;
+    private Status status;
     private int id;
     private Duration duration;
-     private LocalDateTime startTime;
+    private LocalDateTime startTime;
 
-    private Type type ;
+    private Type type;
 
 
     public Task(String name, String description, Status status) {
@@ -108,8 +108,6 @@ public class Task {
                 ", startTime=" + startTime +
                 '}';
     }
-
-
 
 
     @Override

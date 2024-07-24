@@ -138,7 +138,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         task.getStatus(), task.getDescription(), ((Subtask) task).getIdOfEpic());
             } else if (task.getType().equals(Type.EPIC)) {
                 return String.format("%s,%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
-                        task.getStatus(), task.getDescription(), ((Epic)task).getSubtasksOfEpic().size());
+                        task.getStatus(),task.getDescription(),((Epic)task).getSubtasksOfEpic().size());
+
             } else {
                 return String.format("%s,%s,%s,%s,%s%n", task.getId(), task.getType(), task.getName(),
                         task.getStatus(), task.getDescription());
@@ -166,7 +167,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             int maxId = 0;
             while (reader.ready()) {
                 final String taskString = reader.readLine();
-                System.out.println(taskString);
                 if (taskString.equals(manager.heading)) {
                     continue;
                 }

@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.sun.net.httpserver.HttpExchange;
@@ -12,6 +13,7 @@ import managers.TaskManager;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -51,6 +53,23 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
             } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
+        } else if (pathParts.length == 4) {
+            Optional<Integer> id = getTaskId(pathParts[2]);
+            if (pathParts[3].equals("subtasks")) {
+                if(id.isPresent()){
+                Gson gson = new GsonBuilder().setPrettyPrinting()
+                        .registerTypeAdapter(Duration.class, new DurationAdapter())
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                        .serializeNulls()
+                        .create();
+                String response = gson.toJson(manager.getEpicById(id.get()).getSubtasksOfEpic());
+                writeResponse(exchange, response, 200);
+            }else {
+                    writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+                }
+            }else {
+                writeResponse(exchange, "Некорректный идентификатор задачи", 400);
+            }
         } else {
             writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
         }
@@ -63,25 +82,13 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
         Optional<Task> optionalTask = getTaskFromBody(exchange.getRequestBody());
         if (pathParts.length == 2) {
             if (optionalTask.isPresent()) {
-                Epic epic = (Epic) optionalTask.get();
-                epic.setSubtasksOfEpic(new ArrayList<>());
-                manager.addEpic(epic);
+                manager.addEpic((Epic) optionalTask.get());
                 writeResponse(exchange, "Задача успешно добавлена!", 201);
 
             } else {
                 writeResponse(exchange, "Задача введена не корректно!", 400);
             }
-        } else if (pathParts.length == 3) {
-            Optional<Integer> id = getTaskId(pathParts[2]);
 
-            if (optionalTask.isPresent() && id.isPresent()) {
-                manager.updateEpic((Epic) optionalTask.get());
-                writeResponse(exchange, "Задача успешно обновлена!", 201);
-
-
-            } else {
-                writeResponse(exchange, "Некорректный идентификатор задачи", 400);
-            }
         } else {
             writeResponse(exchange, "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
@@ -104,6 +111,7 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
         if (epic.getName() != null && epic.getDescription() != null) {
 
             epic.setType(Type.EPIC);
+            epic.setSubtasksOfEpic(new ArrayList<>());
             return Optional.of(epic);
         } else {
             return Optional.empty();
@@ -145,8 +153,26 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
             return Optional.empty();
         }
     }
-
-
 }
 
+//    Optional<List<Subtask>>getListOfSubtasksFromBody(InputStream stream) throws IOException {
+//        String jsonList = new String(stream.readAllBytes(),StandardCharsets.UTF_8);
+//        if(jsonList.isEmpty()){
+//            return Optional.empty();
+//        }
+//        Gson gson = new GsonBuilder().setPrettyPrinting()
+//                .registerTypeAdapter(Duration.class, new DurationAdapter())
+//                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+//                .serializeNulls()
+//                .create();
+//        List<Subtask>listSubtasksOfEpic = gson.fromJson(jsonList,new UserListTypeToken().getType());
+//        return Optional.of(listSubtasksOfEpic);
+//    }
+//
+//
+//
+//}
+//class UserListTypeToken extends TypeToken<List<Subtask>> {
+//
+//}
 

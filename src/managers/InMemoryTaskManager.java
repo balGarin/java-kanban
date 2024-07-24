@@ -9,7 +9,7 @@ public class
 InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> tasks;
     private Map<Integer, Subtask> subtasks;
-    private Map<Integer, Epic> epics;
+    private  Map<Integer, Epic> epics;
     private HistoryManager historyManager;
 
     private TreeSet<Task> priorityList;
@@ -244,7 +244,7 @@ InMemoryTaskManager implements TaskManager {
     @Override
     public boolean updateEpic(Epic epic) {
         epics.put(epic.getId(), epic);
-        updateStatusOfEpic(epic);
+//        updateStatusOfEpic(epic);
         return true;
     }
 

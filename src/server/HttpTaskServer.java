@@ -7,6 +7,7 @@ import domain.Status;
 import domain.Subtask;
 import domain.Task;
 import managers.FileBackedTaskManager;
+import managers.Managers;
 import managers.TaskManager;
 
 import java.io.IOException;
@@ -16,33 +17,42 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
-    private static TaskManager manager =new FileBackedTaskManager(Paths.get("tasks.txt"));
+    private  TaskManager manager;
+    private  HttpServer server;
 
 
+    public HttpTaskServer(TaskManager manager) {
+        this.manager = manager;
+    }
 
     public static void main(String[] args) throws IOException {
-         HttpServer server = HttpServer.create();
-         server.bind(new InetSocketAddress(PORT),0);
-         server.createContext("/tasks",new TaskHandler(manager));
-        server.createContext("/subtasks",new SubtaskHandler(manager));
-        server.createContext("/epics",new EpicHandler(manager));
-
-        manager.addTask(new Task("name", "description", Status.NEW));
-        manager.addEpic(new Epic("name", "description", Status.NEW));
-//        manager.addSubtask(new Subtask("name", "description", Status.NEW,2));
-        manager.addTask(new Task("name", "description", Status.NEW));
+        TaskManager manager = Managers.getDefault();
+        HttpTaskServer server = new HttpTaskServer(manager);
+        server.start();
+        server.stop();
 
 
 
 
+    }
 
-        FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(Path.of("tasks.txt"));
-     fileBackedTaskManager.getTasks().forEach(System.out::println);
+    public  void start() throws IOException {
+        server = HttpServer.create(new InetSocketAddress(PORT), 0);
+        server.createContext("/tasks", new TaskHandler(manager));
+        server.createContext("/subtasks", new SubtaskHandler(manager));
+        server.createContext("/epics", new EpicHandler(manager));
+        server.createContext("/history", new HistoryHandler(manager));
+        server.createContext("/prioritized", new PriorityHandler(manager));
         server.start();
 
+    }
 
+    public  void stop() {
+        server.stop(2);
     }
 }

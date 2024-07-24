@@ -5,10 +5,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Epic extends Task {
-     private List<Subtask> subtasksOfEpic;
+    private List<Subtask> subtasksOfEpic;
     private int sizeOfSubtasks ;
 
 
@@ -56,13 +57,15 @@ public class Epic extends Task {
     }
 
     private void calculationTimeDotsOfEpic() {
-        subtasksOfEpic.sort(Comparator.comparing(Task::getStartTime));
-        setStartTime(subtasksOfEpic.get(0).getStartTime());
-        setEndTime(subtasksOfEpic.get(subtasksOfEpic.size() - 1).getEndTime());
-        long sumDuration = subtasksOfEpic.stream()
-                .map(subtask -> subtask.getDuration().toMinutes())
-                .mapToLong(Long::longValue).sum();
-        setDuration(Duration.ofMinutes(sumDuration));
+        List<Subtask>subtasksWithTime= subtasksOfEpic.stream()
+                .filter(subtask -> subtask.getStartTime() != null)
+                .sorted(Comparator.comparing(Task::getStartTime)).toList();
+           setStartTime(subtasksWithTime.get(0).getStartTime());
+           setEndTime(subtasksWithTime.get(subtasksWithTime.size() - 1).getEndTime());
+           long sumDuration = subtasksWithTime.stream()
+                   .map(subtask -> subtask.getDuration().toMinutes())
+                   .mapToLong(Long::longValue).sum();
+           setDuration(Duration.ofMinutes(sumDuration));
     }
 
     public void setSubtasksOfEpic(List<Subtask> subtasksOfEpic) {

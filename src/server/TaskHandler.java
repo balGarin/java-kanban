@@ -18,10 +18,12 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 public class TaskHandler implements HttpHandler {
-     TaskManager manager;
+    TaskManager manager;
+
     public TaskHandler(TaskManager manager) {
         this.manager = manager;
     }
@@ -46,7 +48,7 @@ public class TaskHandler implements HttpHandler {
 
     }
 
-     void handleGetRequest(HttpExchange exchange) throws IOException {
+    void handleGetRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         if (pathParts.length == 2) {
@@ -75,7 +77,7 @@ public class TaskHandler implements HttpHandler {
         }
     }
 
-     void handlePostRequest(HttpExchange exchange) throws IOException {
+    void handlePostRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         Optional<Task> optionalTask = getTaskFromBody(exchange.getRequestBody());
@@ -93,12 +95,12 @@ public class TaskHandler implements HttpHandler {
             Optional<Integer> id = getTaskId(pathParts[2]);
 
             if (optionalTask.isPresent() && id.isPresent()) {
-                if(manager.updateTask(optionalTask.get())){
+                if (manager.updateTask(optionalTask.get())) {
                     writeResponse(exchange, "Задача успешно обновлена!", 201);
-                }else {
+                } else {
                     writeResponse(exchange
-                            ,"Задача пересекается во времени!"
-                    ,406);
+                            , "Задача пересекается во времени!"
+                            , 406);
                 }
 
             } else {
@@ -111,7 +113,7 @@ public class TaskHandler implements HttpHandler {
 
     }
 
-     void handleDeleteRequest(HttpExchange exchange) throws IOException {
+    void handleDeleteRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         if (pathParts.length == 2) {
@@ -134,7 +136,7 @@ public class TaskHandler implements HttpHandler {
 
     }
 
-     Optional<Integer> getTaskId(String id) {
+    Optional<Integer> getTaskId(String id) {
 
         try {
             if (manager.getTaskById(Integer.parseInt(id)) == null) {
@@ -146,7 +148,7 @@ public class TaskHandler implements HttpHandler {
         }
     }
 
-     Optional<Task> getTaskFromBody(InputStream stream) throws IOException {
+    Optional<Task> getTaskFromBody(InputStream stream) throws IOException {
         String jsonTask = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         if (jsonTask.isEmpty()) {
             return Optional.empty();
@@ -171,9 +173,9 @@ public class TaskHandler implements HttpHandler {
     }
 
 
-     void writeResponse(HttpExchange exchange,
-                               String responseString,
-                               int responseCode) throws IOException {
+    void writeResponse(HttpExchange exchange,
+                       String responseString,
+                       int responseCode) throws IOException {
         try (OutputStream os = exchange.getResponseBody()) {
             exchange.sendResponseHeaders(responseCode, 0);
             os.write(responseString.getBytes(StandardCharsets.UTF_8));
@@ -197,8 +199,13 @@ class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
 
     @Override
     public LocalDateTime read(final JsonReader jsonReader) throws IOException {
+        try {
+            return LocalDateTime.parse(jsonReader.nextString(), dtf);
+        } catch (IllegalStateException e) {
+            jsonReader.nextNull();
+        }
+        return null;
 
-        return LocalDateTime.parse(jsonReader.nextString(), dtf);
 
     }
 }
@@ -212,15 +219,19 @@ class DurationAdapter extends TypeAdapter<Duration> {
             jsonWriter.nullValue();
             return;
         }
-            jsonWriter.value(duration.toMinutes());
-        }
-
+        jsonWriter.value(duration.toMinutes());
+    }
 
 
     @Override
     public Duration read(JsonReader jsonReader) throws IOException {
+        try {
+           return Duration.ofMinutes(jsonReader.nextInt());
+        } catch (IllegalStateException e) {
+            jsonReader.nextNull();
+        }
+        return null;
 
-        return Duration.ofMinutes(jsonReader.nextInt());
     }
 }
 
