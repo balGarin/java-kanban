@@ -33,8 +33,8 @@ public class HistoryHandler implements HttpHandler {
             writeResponse(exchange, response, 200);
 
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
     }

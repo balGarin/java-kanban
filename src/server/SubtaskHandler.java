@@ -50,8 +50,8 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
         }
     }
 
@@ -65,9 +65,9 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
                 if (manager.addSubtask((Subtask) optionalTask.get())) {
                     writeResponse(exchange, "Задача успешно добавлена!", 201);
                 } else {
-                    writeResponse(exchange
-                            , "Задача пересекается по времени или не найден Эпик для этой подзадачи!"
-                            , 406);
+                    writeResponse(exchange,
+                            "Задача пересекается по времени или не найден Эпик для этой подзадачи!",
+                            406);
                 }
             } else {
                 writeResponse(exchange, "Задача введена не корректно!", 400);
@@ -80,15 +80,15 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
                     writeResponse(exchange, "Задача успешно обновлена!", 201);
 
                 } else {
-                    writeResponse(exchange
-                            , "Задача пересекается во времени,или ее Эпик был удален!", 406);
+                    writeResponse(exchange,
+                            "Задача пересекается во времени,или ее Эпик был удален!", 406);
                 }
             } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
 
@@ -140,8 +140,8 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
             }
 
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
     }

@@ -59,15 +59,15 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
                     String response = gson.toJson(manager.getEpicById(id.get()).getSubtasksOfEpic());
                     writeResponse(exchange, response, 200);
                 } else {
-                    writeResponse(exchange
-                            , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+                    writeResponse(exchange,
+                            "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
                 }
             } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
         }
     }
 
@@ -86,8 +86,8 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
             }
 
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
 
@@ -137,8 +137,8 @@ public class EpicHandler extends TaskHandler implements HttpHandler {
             }
 
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
     }
