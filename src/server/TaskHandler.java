@@ -70,8 +70,8 @@ public class TaskHandler implements HttpHandler {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
         }
     }
 
@@ -96,17 +96,17 @@ public class TaskHandler implements HttpHandler {
                 if (manager.updateTask(optionalTask.get())) {
                     writeResponse(exchange, "Задача успешно обновлена!", 201);
                 } else {
-                    writeResponse(exchange
-                            , "Задача пересекается во времени!"
-                            , 406);
+                    writeResponse(exchange,
+                            "Задача пересекается во времени!",
+                            406);
                 }
 
             } else {
                 writeResponse(exchange, "Некорректный идентификатор задачи", 400);
             }
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
 
@@ -133,8 +133,8 @@ public class TaskHandler implements HttpHandler {
             }
 
         } else {
-            writeResponse(exchange
-                    , "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
+            writeResponse(exchange,
+                    "Такого эндпоинта пока нет,или запрос составлен не верно!", 400);
 
         }
 
