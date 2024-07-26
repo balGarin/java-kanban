@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+
 public class TaskHandler implements HttpHandler {
     TaskManager manager;
 
@@ -27,15 +28,15 @@ public class TaskHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
+        Method method = Method.valueOf(exchange.getRequestMethod());
         switch (method) {
-            case "GET":
+            case GET:
                 handleGetRequest(exchange);
                 break;
-            case "POST":
+            case POST:
                 handlePostRequest(exchange);
                 break;
-            case "DELETE":
+            case DELETE:
                 handleDeleteRequest(exchange);
                 break;
             default:
@@ -45,7 +46,7 @@ public class TaskHandler implements HttpHandler {
 
     }
 
-    void handleGetRequest(HttpExchange exchange) throws IOException {
+    public void handleGetRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         if (pathParts.length == 2) {
@@ -75,7 +76,7 @@ public class TaskHandler implements HttpHandler {
         }
     }
 
-    void handlePostRequest(HttpExchange exchange) throws IOException {
+    public void handlePostRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         Optional<Task> optionalTask = getTaskFromBody(exchange.getRequestBody());
@@ -112,7 +113,7 @@ public class TaskHandler implements HttpHandler {
 
     }
 
-    void handleDeleteRequest(HttpExchange exchange) throws IOException {
+    public void handleDeleteRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         if (pathParts.length == 2) {

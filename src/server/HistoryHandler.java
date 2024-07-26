@@ -12,6 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static server.HttpTaskServer.HISTORY_URL;
+import static server.Method.GET;
+
 public class HistoryHandler implements HttpHandler {
     TaskManager manager;
 
@@ -21,9 +24,9 @@ public class HistoryHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        String uri = exchange.getRequestURI().getPath();
-        if (method.equals("GET") && uri.equals("/history")) {
+        Method method = Method.valueOf(exchange.getRequestMethod());
+        String url = exchange.getRequestURI().getPath();
+        if (method.equals(GET) && url.equals(HISTORY_URL)) {
             Gson gson = new GsonBuilder().setPrettyPrinting()
                     .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                     .registerTypeAdapter(Duration.class, new DurationAdapter())

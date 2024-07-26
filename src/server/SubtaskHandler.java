@@ -25,7 +25,7 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
     }
 
     @Override
-    void handleGetRequest(HttpExchange exchange) throws IOException {
+    public void handleGetRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         if (pathParts.length == 2) {
@@ -56,7 +56,7 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
     }
 
     @Override
-    void handlePostRequest(HttpExchange exchange) throws IOException {
+    public void handlePostRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         Optional<Task> optionalTask = getTaskFromBody(exchange.getRequestBody());
@@ -120,7 +120,7 @@ public class SubtaskHandler extends TaskHandler implements HttpHandler {
     }
 
     @Override
-    void handleDeleteRequest(HttpExchange exchange) throws IOException {
+    public void handleDeleteRequest(HttpExchange exchange) throws IOException {
         String request = exchange.getRequestURI().getPath();
         String[] pathParts = request.split("/");
         if (pathParts.length == 2) {

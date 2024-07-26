@@ -12,6 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static server.HttpTaskServer.PRIORITY_URL;
+import static server.Method.GET;
+
 public class PriorityHandler implements HttpHandler {
     TaskManager manager;
 
@@ -21,9 +24,9 @@ public class PriorityHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        String uri = exchange.getRequestURI().getPath();
-        if (method.equals("GET") && uri.equals("/prioritized")) {
+        Method method = Method.valueOf(exchange.getRequestMethod());
+        String url = exchange.getRequestURI().getPath();
+        if (method.equals(GET) && url.equals(PRIORITY_URL)) {
             Gson gson = new GsonBuilder().setPrettyPrinting()
                     .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                     .registerTypeAdapter(Duration.class, new DurationAdapter())
