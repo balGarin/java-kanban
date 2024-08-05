@@ -20,7 +20,8 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
-        type = Type.TASK;
+        setType(Type.TASK);
+
     }
 
     public Task(String name, String description, Status status, LocalDateTime startTime, Duration duration) {
@@ -29,7 +30,8 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         this.duration = duration;
-        type = Type.TASK;
+        setType(Type.TASK);
+
     }
 
     public String getName() {
@@ -97,13 +99,16 @@ public class Task {
 
     @Override
     public String toString() {
-        return type +
+        return "Task" +
                 "{name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", id=" + id +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
                 '}';
     }
+
 
     @Override
     public boolean equals(Object o) {
